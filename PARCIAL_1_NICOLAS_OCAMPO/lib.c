@@ -25,7 +25,7 @@ void inicializarArrayUsuario(usuario array[], int size)
 }
 
 
-/** \brief nicializa en 0 el campo estado del array de estructuras
+/** \brief Inicializa en 0 el campo estado del array de estructuras
  *
  * \param usuario array[] Array de estructuras
  * \param size tamaño del array
@@ -60,18 +60,17 @@ void nuevoUsuario(usuario array[], int size)
             clearStdin();
             printf("INGRESE NICKNAME: ");
             scanf("%s", array[i].nick);
-            printf("\nINGRESE CONTRASEÑA: ");
+            printf("\nINGRESE PASSWORD: ");
             scanf("%s", array[i].pass);
             proximoId(array, CONST, i);
             array[i].estado=1;
-            printf("\n\nUSUARIO CREADO SATISFACTORIAMENTE\nNOMBRE: %s\nCONTRASEÑA: %s\nID: %d\n", array[i].nick, array[i].pass, array[i].id);
+            printf("\n\nUSUARIO CREADO SATISFACTORIAMENTE\nNOMBRE: %s\nPASSWORD: %s\nID: %d\n", array[i].nick, array[i].pass, array[i].id);
             pause();
             return;
         }
     }
     printf("\nNO HAY MAS ESPACIO LIBRE PARA USUARIOS\n");
     pause();
-
 }
 
 
@@ -105,14 +104,14 @@ void modificarUsuario(usuario array[], int size)
         {
             for(;;)
             {
-                printf("\nNICKNAME: %s\nCONTRASEÑA: %s\n", array[i].nick, array[i].pass);
+                printf("\nNICKNAME: %s\nPASSWORD: %s\n", array[i].nick, array[i].pass);
                 printf("\nESTA SEGURO DE MODIFICAR AL USUARIO?\n1 - SI\n2 - NO\n ");
                 scanf("%d", &opcion);
                 if(opcion==1)
                 {
                     printf("\nINGRESE NUEVO NICKNAME: ");
                     scanf("%s", array[i].nick);
-                    printf("\nINGRESE NUEVA CONTRASEÑA: ");
+                    printf("\nINGRESE NUEVO PASSWORD: ");
                     scanf("%s", array[i].pass);
                     printf("\n\nUSUARIO MODIFICADO SATISFACTORIAMENTE\n");
                     pause();
@@ -159,7 +158,7 @@ void bajaUsuario(usuario array[], int size)
         {
             for(;;)
             {
-                printf("\nNICKNAME: %s\nCONTRASEÑA: %s\n", array[i].nick, array[i].pass);
+                printf("\nNICKNAME: %s\nPASSWORD: %s\n", array[i].nick, array[i].pass);
                 printf("\nESTA SEGURO DE ELIMINAR AL USUARIO?\n1 - SI\n2 - NO\n ");
                 scanf("%d", &opcion);
                 if(opcion==1)
@@ -241,8 +240,7 @@ void proximoIdProducto(producto array[], int size, int posicion)
 void publicarProducto(usuario arrayUsuario[], producto arrayProducto[], int sizeUsuario, int sizeProducto)
 {
     int i;
-    int j;
-    int aux;
+    int aux=-1;
     float numero=0;
     int idUsuario;
     char validar[CONST];
@@ -255,18 +253,18 @@ void publicarProducto(usuario arrayUsuario[], producto arrayProducto[], int size
         printf("\nERROR EN EL INGRESO DEL ID, REINTENTE OPCION\n");
         pause();
     }
-    for(j=0; j<sizeUsuario; j++)
+    for(i=0; i<sizeUsuario; i++)
     {
-        if(arrayUsuario[j].id==idUsuario && arrayUsuario[j].estado==1){
-            aux=j;
+        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1){
+            aux=i;
             break;
-    }
-        else
-        {
-            printf("\nNO SE ENCONTRO LA ID SOLICITADA\n");
-            pause();
-            return;
         }
+
+    }
+    if(aux==-1)
+    {
+        printf("\nNO SE ENCONTRO LA ID SOLICITADA\n\n");
+        return;
     }
     for(i=0; i<sizeProducto; i++)
     {
@@ -278,13 +276,13 @@ void publicarProducto(usuario arrayUsuario[], producto arrayProducto[], int size
             printf("\nINGRESE EL PRECIO DEL PRODUCTO: ");
             scanf("%f", &numero);
             arrayProducto[i].precio=numero;
-            printf("\nINGRESE EL STOCK DEL PRODUCTO");
+            printf("\nINGRESE EL STOCK DEL PRODUCTO: ");
             scanf("%d", &aux);
             arrayProducto[i].stock=aux;
             arrayProducto[i].idUsuario=idUsuario;
             proximoIdProducto(arrayProducto, PRODUCTO, i);
             arrayProducto[i].estado=1;
-            printf("PRODUCTO PUBLICADO EXITOSAMENTE!\nNOMBRE: %s \nPRECIO: %f\nSTOCK: %d\nID DEL PRODUCTO: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto);
+            printf("\n\nPRODUCTO PUBLICADO EXITOSAMENTE!\nNOMBRE: %s \nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto);
             pause();
             return;
         }
@@ -306,7 +304,7 @@ void publicarProducto(usuario arrayUsuario[], producto arrayProducto[], int size
 void modificarProducto(usuario arrayUsuario[], producto arrayProducto[], int sizeUsuario, int sizeProducto)
 {
     int i;
-    int aux;
+    int aux=-1;
     int flag=0;
     int opcion;
     float numero=0;
@@ -323,14 +321,16 @@ void modificarProducto(usuario arrayUsuario[], producto arrayProducto[], int siz
     }
     for(i=0; i<sizeUsuario; i++)
     {
-        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1)
+        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1){
+            aux=i;
             break;
-        else
-        {
-            printf("\nNO SE ENCONTRO LA ID SOLICITADA\n");
-            pause();
-            return;
         }
+
+    }
+    if(aux==-1)
+    {
+        printf("\nNO SE ENCONTRO LA ID SOLICITADA\n\n");
+        return;
     }
     for(i=0; i<sizeProducto; i++)
     {
@@ -372,10 +372,10 @@ void modificarProducto(usuario arrayUsuario[], producto arrayProducto[], int siz
                     printf("\nINGRESE EL NUEVO PRECIO DEL PRODUCTO: ");
                     scanf("%f", &numero);
                     arrayProducto[i].precio=numero;
-                    printf("\nINGRESE EL NUEVO STOCK DEL PRODUCTO");
+                    printf("\nINGRESE EL NUEVO STOCK DEL PRODUCTO: ");
                     scanf("%d", &aux);
                     arrayProducto[i].stock=aux;
-                    printf("\nPRODUCTO PUBLICADO EXITOSAMENTE!\nNOMBRE: %s\nPRECIO: %.2f\nsSTOCK: %d\nID DEL PRODUCTO: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto);
+                    printf("\n\nPRODUCTO PUBLICADO EXITOSAMENTE!\nNOMBRE: %s\nPRECIO: %.2f\nsSTOCK: %d\nID DEL PRODUCTO: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto);
                     pause();
                     return;
                 }
@@ -405,6 +405,7 @@ void eliminarProducto(usuario arrayUsuario[], producto arrayProducto[], int size
 {
     int i;
     int flag=0;
+    int aux=-1;
     int opcion;
     int idUsuario;
     char validar[CONST];
@@ -419,14 +420,16 @@ void eliminarProducto(usuario arrayUsuario[], producto arrayProducto[], int size
     }
     for(i=0; i<sizeUsuario; i++)
     {
-        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1)
+        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1){
+            aux=i;
             break;
-        else
-        {
-            printf("\nNO SE ENCONTRO LA ID SOLICITADA\n");
-            pause();
-            return;
         }
+
+    }
+    if(aux==-1)
+    {
+        printf("\nNO SE ENCONTRO LA ID SOLICITADA\n\n");
+        return;
     }
     for(i=0; i<sizeProducto; i++)
     {
@@ -494,7 +497,7 @@ void realizarCompra(usuario arrayUsuario[], producto arrayProducto[], int sizeUs
     int i;
     int flag=0;
     int opcion;
-    int aux;
+    int aux=-1;
     int idUsuario;
     char validar[CONST];
     printf("\nINGRESE ID DEL USUARIO: ");
@@ -508,20 +511,22 @@ void realizarCompra(usuario arrayUsuario[], producto arrayProducto[], int sizeUs
     }
     for(i=0; i<sizeUsuario; i++)
     {
-        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1)
+        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1){
+            aux=i;
             break;
-        else
-        {
-            printf("\nNO SE ENCONTRO LA ID SOLICITADA\n");
-            pause();
-            return;
         }
+
+    }
+    if(aux==-1)
+    {
+        printf("\nNO SE ENCONTRO LA ID SOLICITADA\n\n");
+        return;
     }
     for(i=0; i<sizeProducto; i++)
     {
         if(arrayProducto[i].estado==1 && idUsuario==arrayProducto[i].idUsuario && arrayProducto[i].stock>0)
         {
-            printf("!\nNOMBRE: %s\nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto);
+            printf("\n--------------------------------------------\n\nNOMBRE: %s\nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto);
             flag=1;
         }
     }
@@ -564,7 +569,7 @@ void realizarCompra(usuario arrayUsuario[], producto arrayProducto[], int sizeUs
                     }
                     printf("\nINGRESE CALIFICACION PARA EL VENDEDOR (1/10): ");
                     scanf("%d", &aux);
-                    arrayUsuario[arrayProducto[i].aux].calificacion=aux;
+                    arrayUsuario[arrayProducto[i].aux].calificacion=arrayUsuario[arrayProducto[i].aux].calificacion+aux;
                     arrayUsuario[arrayProducto[i].aux].cantidadCalificaciones++;
                     printf("PRODUCTO COMPRADO EXITOSAMENTE!\n");
                     pause();
@@ -592,6 +597,7 @@ void realizarCompra(usuario arrayUsuario[], producto arrayProducto[], int sizeUs
  */
 void listarPublicacionesUsuario(usuario arrayUsuario[], producto arrayProducto[], int sizeUsuario, int sizeProducto){
     int i;
+    int aux=-1;
     int flag=0;
     int idUsuario;
     char validar[CONST];
@@ -606,20 +612,22 @@ void listarPublicacionesUsuario(usuario arrayUsuario[], producto arrayProducto[]
     }
     for(i=0; i<sizeUsuario; i++)
     {
-        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1)
+        if(arrayUsuario[i].id==idUsuario && arrayUsuario[i].estado==1){
+            aux=i;
             break;
-        else
-        {
-            printf("\nNO SE ENCONTRO LA ID SOLICITADA\n");
-            pause();
-            return;
         }
+
+    }
+    if(aux==-1)
+    {
+        printf("\nNO SE ENCONTRO LA ID SOLICITADA\n\n");
+        return;
     }
     for(i=0; i<sizeProducto; i++)
     {
         if(arrayProducto[i].estado==1 && idUsuario==arrayProducto[i].idUsuario)
         {
-            printf("!\nNOMBRE: %s\nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\nCANTIDAD VENDIDA: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto, arrayProducto[i].vendido);
+            printf("\n---------------------------------------\n\nNOMBRE: %s\nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\nCANTIDAD VENDIDA: %d\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto, arrayProducto[i].vendido);
             flag=1;
         }
     }
@@ -649,7 +657,7 @@ void listarPublicaciones(usuario arrayUsuario[], producto arrayProducto[], int s
     {
         if(arrayProducto[i].estado==1)
         {
-            printf("!\nNOMBRE DEL PRODUCTO: %s\nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\nCANTIDAD VENDIDA: %d\nNOMBRE DEL USUARIO: %s\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto, arrayProducto[i].vendido, arrayUsuario[arrayProducto[i].aux].nick);
+            printf("\n------------------------------------------\n\nNOMBRE DEL PRODUCTO: %s\nPRECIO: %.2f\nSTOCK: %d\nID DEL PRODUCTO: %d\nCANTIDAD VENDIDA: %d\nNOMBRE DEL USUARIO: %s\n", arrayProducto[i].nombre, arrayProducto[i].precio, arrayProducto[i].stock, arrayProducto[i].idProducto, arrayProducto[i].vendido, arrayUsuario[arrayProducto[i].aux].nick);
             flag=1;
         }
     }
@@ -674,11 +682,24 @@ void listarPublicaciones(usuario arrayUsuario[], producto arrayProducto[], int s
  */
 void listarUsuarios(usuario arrayUsuario[], int size){
     int i;
+    float promedio;
+    float cantidad;
+    float calificacion;
+
     for(i=0;i<size; i++)
     {
         if(arrayUsuario[i].estado==1)
         {
-            printf("NOMBRE DE USUARIO: %s\nCALIFICACION PROMEDIO: %d\n\n", arrayUsuario[i].nick, (arrayUsuario[i].calificacion/arrayUsuario[i].cantidadCalificaciones));
+            if(arrayUsuario[i].cantidadCalificaciones>0)
+            {
+                calificacion=arrayUsuario[i].calificacion;
+                cantidad=arrayUsuario[i].cantidadCalificaciones;
+                promedio=calificacion/cantidad;
+            }
+            else
+                promedio=0;
+
+            printf("\n-------------------------------------\nNOMBRE DE USUARIO: %s\nCALIFICACION PROMEDIO: %.2f\n\n", arrayUsuario[i].nick, promedio);
         }
     }
     pause();
